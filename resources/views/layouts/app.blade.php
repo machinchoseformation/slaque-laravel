@@ -22,25 +22,30 @@
 </head>
 <body>
     <header>
-        <a href="{{ url('/') }}">Slaque</a>
-        <!-- Authentication Links -->
-        @guest
-                <a href="{{ route('login') }}">Connexion</a>
+        <div class="container">
+            <a class="logo" href="{{ url('/') }}"><img src="{{ asset('img/logo.svg')  }}" alt="Slaque logo">Slaque</a>
+            <nav>
+                <!-- Authentication Links -->
+                @guest
+                        <a href="{{ route('login') }}">Connexion</a>
 
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}">Inscription</a>
-                @endif
-        @else
-            <a href="{{ route('group_create')  }}">Créer un groupe</a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}">Inscription</a>
+                        @endif
+                @else
+                    <a href="{{ route('group_create')  }}">Créer un groupe</a>
 
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                Déconnexion ({{ Auth::user()->name }})
-            </a>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Déconnexion ({{ Auth::user()->name }})
+                    </a>
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" >
-                @csrf
-            </form>
-        @endguest
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" >
+                        @csrf
+                    </form>
+
+            @endguest
+            </nav>
+        </div>
     </header>
 
     <div class="flash-message">
@@ -50,10 +55,14 @@
     </div> <!-- end .flash-message -->
 
     <main>
-        @yield('content')
+        <div class="container">
+            @yield('content')
+        </div>
     </main>
     <footer>
+        <div class="container">
 
+        </div>
     </footer>
 </body>
 </html>
