@@ -10,7 +10,7 @@
         <div class="">
             <label for="email" class="">Courriel</label>
 
-            <input id="email" type="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
+            <input id="email" type="text" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
                    value="{{ old('email') }}" required autofocus>
 
             @if ($errors->has('email'))
