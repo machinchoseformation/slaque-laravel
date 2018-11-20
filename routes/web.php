@@ -3,10 +3,31 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+
+Route::post('/group/{groupId}/message', "MessageController@create")
+    ->name('message_create');
+
+Route::get('/group/{groupId}/message/since', "MessageController@getSince")
+    ->name('message_get_since');
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/contact', 'MainController@contact');
 
-//Auth::routes();
+Route::get('/groupe/creation', 'GroupController@showCreateForm')->name('group_create');
+Route::post('/groupe/creation', 'GroupController@create');
+Route::get('/groupe/{id}', 'GroupController@show')
+    ->where('id', '[0-9]+')
+    ->name('group_show');
+
+
+Route::get('/groupe/{groupId}/participants/invitations', 'ParticipantController@showInvite')
+    ->where('groupId', '[0-9]+')
+    ->name('participant_show_invite');
+
+Route::get('/groupe/{groupId}/participants/invitations/{userId}', 'ParticipantController@inviteUserToGroup')
+    ->where('groupId', '[0-9]+')
+    ->where('userId', '[0-9]+')
+    ->name('participant_invite_user_to_group');
 
 // Authentication Routes...
 $this->get('connexion', 'Auth\LoginController@showLoginForm')->name('login');

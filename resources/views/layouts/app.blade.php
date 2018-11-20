@@ -10,6 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
@@ -21,9 +22,7 @@
 </head>
 <body>
     <header>
-        <a href="{{ url('/') }}">
-            {{ config('app.name', 'Slaque') }}
-        </a>
+        <a href="{{ url('/') }}">Slaque</a>
         <!-- Authentication Links -->
         @guest
                 <a href="{{ route('login') }}">Connexion</a>
@@ -32,12 +31,10 @@
                     <a href="{{ route('register') }}">Inscription</a>
                 @endif
         @else
-            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                {{ Auth::user()->name }} <span class="caret"></span>
-            </a>
+            <a href="{{ route('group_create')  }}">Créer un groupe</a>
 
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                Déconnexion
+                Déconnexion ({{ Auth::user()->name }})
             </a>
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST" >
@@ -46,7 +43,13 @@
         @endguest
     </header>
 
-    <main class="py-4">
+    <div class="flash-message">
+        @if(Session::has('message'))
+            <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+        @endif
+    </div> <!-- end .flash-message -->
+
+    <main>
         @yield('content')
     </main>
     <footer>

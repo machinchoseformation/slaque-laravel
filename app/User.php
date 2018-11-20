@@ -10,6 +10,23 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public function groupsCreated()
+    {
+        return $this
+            ->hasMany('App\Group', 'creator_id');
+    }
+
+    public function groups()
+    {
+        return $this
+            ->belongsToMany('App\Group', 'group_user');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany('App\Message');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

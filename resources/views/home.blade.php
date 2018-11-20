@@ -1,23 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Accueil</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+<h2>Accueil</h2>
 
-                    Vous êtes connecté !
-                </div>
-            </div>
+<div>
+    @if (session('status'))
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
         </div>
-    </div>
+    @endif
 </div>
+
+<section>
+    <h3>Les groupes que vous avez créés</h3>
+    @foreach (Auth::user()->groupsCreated as $group)
+        <article>
+            <a href="{{route('group_show', ['id' => 1])}}">{{$group->name}}</a>
+        </article>
+    @endforeach
+
+    <h3>Les groupes auxquels vous participez</h3>
+    @foreach (Auth::user()->groups as $group)
+        <article>
+            <a href="{{route('group_show', ['id' => 1])}}">{{$group->name}}</a>
+        </article>
+    @endforeach
+</section>
+
 @endsection

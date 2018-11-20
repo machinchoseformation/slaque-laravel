@@ -1,3 +1,25 @@
 body {
-    font-family: Lato;
+    font-family: Lato, sans-serif;
+}
+
+#chat-app {
+    display: flex;
+}
+
+.chat {
+    margin-left: 20px;
+    flex-grow: 2;
+}
+
+.chat article {
+    margin-bottom: 9px;
+}
+
+.chat p {
+    margin: 0;
+}
+
+#messages-list {
+    height: 60vh;
+    overflow-y: scroll;
 }
