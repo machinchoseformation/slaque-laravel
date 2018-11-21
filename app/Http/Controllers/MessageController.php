@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Api\JsonResponse;
 use App\Group;
 use App\Message;
 
@@ -17,11 +18,8 @@ class MessageController extends Controller
         $message = Message::find($request->input('messageId'));
 
         if (Gate::denies('delete-message-in-group', $message)) {
-            return response()->json([
-                'error_message' => 'access denied',
-                'status' => 'error',
-                'data' => [],
-            ])->setStatusCode(403);
+            $response = new JsonResponse([], 'access denied', 'error', 403);
+            return $response->send();
         }
 
         $message->delete();
@@ -37,11 +35,8 @@ class MessageController extends Controller
     {
         $group = Group::find($groupId);
         if (Gate::denies('read-group-messages', $group)) {
-            return response()->json([
-                'error_message' => 'access denied',
-                'status' => 'error',
-                'data' => [],
-            ])->setStatusCode(403);
+            $response = new JsonResponse([], 'access denied', 'error', 403);
+            return $response->send();
         }
 
         $since = $request->input('since');
@@ -54,11 +49,8 @@ class MessageController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return response()->json([
-            'error_message' => null,
-            'status' => 'ok',
-            'data' => $messages,
-        ]);
+        $response = new JsonResponse($messages);
+        return $response->send();
     }
 
     public function create($groupId, Request $request)
@@ -79,10 +71,7 @@ class MessageController extends Controller
             "creator_id" => Auth::id(),
         ]);
 
-        return response()->json([
-            'error_message' => null,
-            'status' => 'ok',
-            'data' => $message,
-        ]);
+        $response = new JsonResponse($message);
+        return $response->send();
     }
 }
