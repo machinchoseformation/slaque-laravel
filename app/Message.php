@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    public $fillable = ['content', 'creator_id', 'group_id'];
+    public $fillable = ['content', 'creator_id', 'group_id', 'edited', 'deleted'];
 
+    protected $attributes = array(
+        'edited' => false,
+        'deleted' => false,
+    );
 
     public function creator()
     {
