@@ -21,7 +21,7 @@ header {
 header .container {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
 }
 
 header nav a {
@@ -35,9 +35,16 @@ header nav a {
 }
 
 .logo img {
-    width: 28px;
+    width: 37px;
     margin-right: 3px;
+    position: relative;
+    top: 4px;
     transform: rotate(45deg);
+    transition: all 0.5s ease-in-out;
+}
+
+.logo:hover img {
+    transform: rotate(270deg);
 }
 
 header a {
