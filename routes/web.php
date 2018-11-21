@@ -20,6 +20,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/contact', 'MainController@contact');
 
 Route::get('/groupe/creation', 'GroupController@showCreateForm')->name('group_create');
+Route::get('/groupe/prive/creation', 'GroupController@createOneOnOne')->name('group_one_on_one_create');
 Route::post('/groupe/creation', 'GroupController@create');
 Route::get('/groupe/{id}', 'GroupController@show')
     ->where('id', '[0-9]+')

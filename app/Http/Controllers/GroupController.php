@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -26,6 +27,29 @@ class GroupController extends Controller
     public function showCreateForm()
     {
         return view('groups.create');
+    }
+
+    public function createOneOnOne(Request $request)
+    {
+        $validatedData = $request->validate([
+            'other_user_id' => 'required',
+        ]);
+
+        $otherUserId = $validatedData['other_user_id'];
+        $otherUser = User::find($otherUserId);
+
+        $group = Group::create([
+            'name' => Auth::id() . "_" . $otherUserId,
+            'creator_id' => Auth::user()->id,
+            'is_one_on_one' => true,
+            'other_user_id' => $otherUserId,
+        ]);
+
+        $group->participants()->attach(Auth::user());
+        $group->participants()->attach($otherUser);
+
+        return Redirect::route('group_show', ['id' => $group->id])
+            ->with('message', 'Groupe créé!');
     }
 
     public function create(Request $request)

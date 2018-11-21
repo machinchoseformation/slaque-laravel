@@ -18,6 +18,9 @@ class CreateGroupsTable extends Migration
             $table->string('name');
             $table->integer('creator_id')->unsigned();
             $table->foreign('creator_id')->references('id')->on('users');
+            $table->boolean('is_one_on_one')->default(false);
+            $table->integer('other_user_id')->unsigned()->nullable(true);
+            $table->foreign('other_user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

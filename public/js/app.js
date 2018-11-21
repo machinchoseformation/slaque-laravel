@@ -1,7 +1,6 @@
 var messageForm = $("#message-form");
 var refreshBtn = $("#refresh-btn");
 var lastMessageDate = null;
-var getMessageInterval;
 var shownMessageIds = [];
 
 $.ajaxSetup({
@@ -121,20 +120,16 @@ function loadUserConversation(e){
     })
 }
 
-window.setInterval(ping, 1000);
 
-messageForm.on("submit", sendMessage);
 refreshBtn.on("click", function(e){
     e.preventDefault();
     getMessageSince();
 });
-
+messageForm.on("submit", sendMessage);
 $("#messages-list").on("click", ".delete-btn", deleteMessage);
+$(".users-list .user-btn").on("click", loadUserConversation);
+
+window.setInterval(getMessageSince, 2000);
+window.setInterval(ping, 1000);
 
 getMessageSince();
-//getMessageInterval = window.setInterval(getMessageSince, 2000);
-
-
-//$(".ma-class").first().click();
-
-$(".users-list .user-btn").on("click", loadUserConversation);
