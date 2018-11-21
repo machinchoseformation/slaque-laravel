@@ -2,6 +2,13 @@
 
 @section('title', 'Groupe')
 
+@section('js')
+    <script>
+        var deleteUrl = "{{ @route('message_delete')  }}";
+    </script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
+@endsection
+
 @section('content')
     <div id="chat-app">
         <div>

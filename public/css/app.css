@@ -3,6 +3,10 @@ body {
     margin: 0;
 }
 
+svg {
+    fill: red;
+}
+
 a {
     text-decoration: none;
 }
@@ -10,6 +14,7 @@ a {
 .container {
     max-width: 1000px;
     margin: auto;
+    padding: 0 10px;
 }
 
 header {

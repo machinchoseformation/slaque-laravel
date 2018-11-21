@@ -4,6 +4,23 @@ var lastMessageDate = null;
 var getMessageInterval;
 var shownMessageIds = [];
 
+function deleteMessage(e){
+    e.preventDefault();
+    var messageElement = $(this).parents('.message');
+    var messageId = $(this).data("message-id");
+    $.ajax({
+        url: deleteUrl,
+        data: {
+            messageId: messageId
+        },
+        method: 'GET'
+    })
+    .done(function(response){
+        messageElement.slideUp();
+        console.log(response);
+    });
+}
+
 function getMessageSince(){
     $.ajax({
         url: refreshBtn.attr("href"),
@@ -28,9 +45,10 @@ function addMessage(messageData){
     }
 
     var str = `
-        <article>
+        <article class="message">
             <div class="message-by">${messageData.creator_name} à ${messageData.time}</div>
             <p>${messageData.content}</p>
+            <button class="delete-btn" data-message-id="${messageData.id}">X</button>
         </article>
     `;
     $("#messages-list").append(str);
@@ -57,5 +75,7 @@ refreshBtn.on("click", function(e){
     getMessageSince();
 });
 
+$("#messages-list").on("click", ".delete-btn", deleteMessage);
+
 getMessageSince();
-getMessageInterval = window.setInterval(getMessageSince, 2000);
+//getMessageInterval = window.setInterval(getMessageSince, 2000);

@@ -3,12 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-
+/** api  */
 Route::post('/group/{groupId}/message', "MessageController@create")
     ->name('message_create');
 
 Route::get('/group/{groupId}/message/since', "MessageController@getSince")
     ->name('message_get_since');
+
+Route::get('/message', "MessageController@delete")
+    ->name('message_delete');
+
+
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/contact', 'MainController@contact');
@@ -50,3 +55,7 @@ $this->post('mdp/changement', 'Auth\ResetPasswordController@reset')->name('passw
 if ($options['verify'] ?? false) {
     $this->emailVerification();
 }
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

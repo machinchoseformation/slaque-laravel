@@ -31,12 +31,14 @@ class GroupController extends Controller
             'name' => 'required|unique:groups|max:255',
         ]);
 
-        $data = Group::create([
+        $group = Group::create([
             'name' => $validatedData['name'],
-            'creator_id' => Auth::user()->id
+            'creator_id' => Auth::user()->id,
         ]);
 
-        return Redirect::route('group_show', ['id' => $data->id])
+        $group->participants()->attach(Auth::user());
+
+        return Redirect::route('group_show', ['id' => $group->id])
             ->with('message', 'Groupe créé!');
     }
 }
