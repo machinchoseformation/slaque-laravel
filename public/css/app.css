@@ -1,6 +1,18 @@
 body {
     font-family: Lato, sans-serif;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
+}
+
+button, input, textarea, select {
+    font-family: inherit;
+    box-sizing: border-box;
 }
 
 a {
@@ -13,9 +25,29 @@ a {
     padding: 0 10px;
 }
 
+h2 {
+    font-size: 1.2rem;
+    margin: 8px 0 12px 0;
+}
+
+h3 {
+    font-size: 1.0rem;
+    margin: 10px 0 4px 0;
+}
+
+.sidebar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+p {
+    margin: 3px 0;
+}
+
 header {
-    background-color: #3d4852;
-    padding: 8px 0 10px 0;
+    background-color: #232020;
+    padding: 0px 0 5px 0;
     color: #FFF;
 }
 
@@ -52,6 +84,14 @@ header a {
     color: #FFF;
 }
 
+main {
+    background-color: #fff;
+}
+
+.sidebar {
+    min-width: 140px;
+}
+
 #chat-app {
     display: flex;
 }
@@ -70,8 +110,34 @@ header a {
 }
 
 #messages-list {
+    margin-top: 10px;
     height: 60vh;
     overflow-y: scroll;
+    padding-right: 5px;
+}
+
+.message {
+    display: flex;
+    background-color: rgba(20, 137, 247, 0.04);
+    padding: 5px 6px;
+}
+
+.message .message-content {
+    flex-grow: 1;
+}
+.message .message-by, .small {
+    font-size: 0.8rem;
+    color: #3d4852;
+}
+
+#message-input {
+    width: 100%;
+    padding: 4px 4px;
+    margin: 3px 0;
+}
+
+.message .message-tools {
+
 }
 
 form input[type=text],
@@ -82,4 +148,43 @@ form input[type=password]{
 
 form div {
     margin-top: 5px;
+}
+
+button {
+    box-sizing: border-box;
+    background: none;
+    background-color: #748E54;
+    color: #FFF;
+    border: none;
+    outline: none;
+    border-radius: 2px;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+
+li.user-you {
+    font-weight: bold;
+}
+
+.online .connection-status {
+    background-color: #38c172;
+}
+
+.connection-status {
+    width: 11px;
+    height: 11px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    top: 1px;
+    margin-right: 5px;
+}
+
+footer {
+    background-color: #232020;
+    padding: 5px 0 5px 0;
+    color: #FFF;
+    text-align: center;
 }

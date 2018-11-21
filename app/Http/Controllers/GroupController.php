@@ -17,6 +17,9 @@ class GroupController extends Controller
     public function show($id)
     {
         $group = Group::find($id);
+
+        //@todo: vérifier que le user a été invité || chef
+
         return view('groups.show', ['group' => $group]);
     }
 

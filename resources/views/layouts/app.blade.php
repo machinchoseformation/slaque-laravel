@@ -61,7 +61,7 @@
     </main>
     <footer>
         <div class="container">
-
+            &copy; {{date("Y")}} | Slaque
         </div>
     </footer>
 

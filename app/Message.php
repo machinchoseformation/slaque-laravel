@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    public $fillable = ['content', 'creator_id', 'group_id', 'edited', 'deleted'];
+    public $fillable = ['content', 'creator_id', 'edited', 'deleted', 'group_id'];
 
     protected $attributes = array(
         'edited' => false,
         'deleted' => false,
     );
+    
+    public function group()
+    {
+        return $this->belongsTo('App\Group');
+    }
 
     public function creator()
     {
         return $this->belongsTo('App\User');
-    }
-
-    public function group()
-    {
-        return $this->belongsTo('App\Group');
     }
 
     public function getCreatorNameAttribute()

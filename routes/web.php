@@ -10,10 +10,11 @@ Route::post('/group/{groupId}/message', "MessageController@create")
 Route::get('/group/{groupId}/message/since', "MessageController@getSince")
     ->name('message_get_since');
 
-Route::get('/message', "MessageController@delete")
+Route::delete('/message', "MessageController@delete")
     ->name('message_delete');
 
-
+Route::get('/participant/ping', 'ParticipantController@participantPing')
+    ->name('participant_ping');
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/contact', 'MainController@contact');

@@ -15,7 +15,7 @@ class Message extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('content');
+            $table->text('content');
             $table->boolean('edited')->default(false);
             $table->boolean('deleted')->default(false);
             $table->integer('creator_id')->unsigned();
