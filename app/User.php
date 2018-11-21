@@ -22,9 +22,9 @@ class User extends Authenticatable
             ->belongsToMany('App\Group', 'group_user');
     }
 
-    public function messages()
+    public function groupMessages()
     {
-        return $this->hasMany('App\Message');
+        return $this->hasMany('App\GroupMessage');
     }
 
     /**

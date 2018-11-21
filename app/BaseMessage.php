@@ -4,19 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+abstract class BaseMessage extends Model
 {
-    public $fillable = ['content', 'creator_id', 'edited', 'deleted', 'group_id'];
+    public $fillable = ['content', 'creator_id', 'edited', 'deleted'];
 
     protected $attributes = array(
         'edited' => false,
         'deleted' => false,
     );
-    
-    public function group()
-    {
-        return $this->belongsTo('App\Group');
-    }
 
     public function creator()
     {
@@ -44,5 +39,5 @@ class Message extends Model
      * @var array
      */
    protected $appends = ['creator_name', 'time', 'date'];
-   protected $hidden = ['creator', 'updated_at', 'group_id'];
+   protected $hidden = ['creator', 'updated_at'];
 }

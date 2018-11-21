@@ -135,4 +135,6 @@ getMessageSince();
 //getMessageInterval = window.setInterval(getMessageSince, 2000);
 
 
+//$(".ma-class").first().click();
+
 $(".users-list .user-btn").on("click", loadUserConversation);

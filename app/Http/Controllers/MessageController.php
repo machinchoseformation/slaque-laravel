@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\JsonResponse;
 use App\Group;
-use App\Message;
+use App\GroupMessage;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +15,7 @@ class MessageController extends Controller
 {
     public function delete(Request $request)
     {
-        $message = Message::find($request->input('messageId'));
+        $message = GroupMessage::find($request->input('messageId'));
 
         if (Gate::denies('delete-message-in-group', $message)) {
             $response = new JsonResponse([], 'access denied', 'error', 403);
@@ -41,7 +41,7 @@ class MessageController extends Controller
 
         $since = $request->input('since');
 
-        $messages = Message::
+        $messages = GroupMessage::
             where('group_id', '=', $group->id)
             ->when($since, function($query, $since){
                 return $query->where('created_at', '>', $since);
@@ -65,7 +65,7 @@ class MessageController extends Controller
             ])->setStatusCode(403);
         }
 
-        $message = Message::create([
+        $message = GroupMessage::create([
             "content" => $request->input('message'),
             "group_id" => $groupId,
             "creator_id" => Auth::id(),

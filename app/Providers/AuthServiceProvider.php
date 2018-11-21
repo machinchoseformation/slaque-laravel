@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Group;
-use App\Message;
+use App\GroupMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
             return ($group->participants->contains($user) || $group->creator->id == $user->id);
         });
 
-        Gate::define('delete-message-in-group', function ($user, Message $message) {
+        Gate::define('delete-message-in-group', function ($user, GroupMessage $message) {
             //soit l'auteur du message, soit le créateur du groupe
             return ($message->creator->id == $user->id || $message->group->creator->id == $user->id);
         });

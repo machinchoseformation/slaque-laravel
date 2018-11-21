@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Message extends Migration
+class GroupMessage extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class Message extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('group_messages', function (Blueprint $table) {
             $table->increments('id');
             $table->text('content');
             $table->boolean('edited')->default(false);
