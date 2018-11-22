@@ -11,6 +11,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/jquery.min.js') }}" defer></script>
+    <script>var pingUrl = "{{ @route('participant_ping')  }}";</script>
+    <script src="{{ asset('js/ping.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">

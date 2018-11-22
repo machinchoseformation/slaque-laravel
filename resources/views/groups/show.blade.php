@@ -5,7 +5,6 @@
 @section('js')
     <script>
         var deleteUrl = "{{ @route('message_delete')  }}";
-        var pingUrl = "{{ @route('participant_ping')  }}";
         var loadUserConversationUrl = "{{ @route('participant_ping')  }}";
         var groupId = "{{ $group->id  }}";
     </script>
