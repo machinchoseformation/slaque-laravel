@@ -16,16 +16,25 @@ Route::delete('/message', "MessageController@delete")
 Route::get('/participant/ping', 'ParticipantController@participantPing')
     ->name('participant_ping');
 
+Route::get('/participant/search', 'ParticipantController@userSearch')
+    ->name('user_search');
+
+
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/contact', 'MainController@contact');
+
+
+
+Route::get('/groupe', 'GroupController@list')->name('group_list');
 
 Route::get('/groupe/creation', 'GroupController@showCreateForm')->name('group_create');
 Route::get('/groupe/prive/creation', 'GroupController@createOneOnOne')->name('group_one_on_one_create');
 Route::post('/groupe/creation', 'GroupController@create');
+
 Route::get('/groupe/{id}', 'GroupController@show')
     ->where('id', '[0-9]+')
     ->name('group_show');
-
 
 Route::get('/groupe/{groupId}/participants/invitations', 'ParticipantController@showInvite')
     ->where('groupId', '[0-9]+')

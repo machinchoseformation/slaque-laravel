@@ -16,11 +16,15 @@ class GroupController extends Controller
         $this->middleware('auth');
     }
 
+    public function list()
+    {
+        return view('groups.list');
+    }
+
     public function show($id)
     {
         $group = Group::find($id);
 
-        //@todo: vérifier que le user a été invité || chef
         if (Gate::denies('read-group-messages', $group)) {
             abort(403, "Non non non, pas votre groupe.");
         }

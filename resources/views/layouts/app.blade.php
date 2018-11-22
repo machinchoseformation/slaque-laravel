@@ -33,6 +33,7 @@
                             <a href="{{ route('register') }}">Inscription</a>
                         @endif
                 @else
+                    <a href="{{ route('group_list')  }}">Mes groupes</a>
                     <a href="{{ route('group_create')  }}">Créer un groupe</a>
 
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

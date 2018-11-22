@@ -42,6 +42,21 @@ class ParticipantController extends Controller
         return $response->send();
     }
 
+    public function userSearch(Request $request)
+    {
+        $kw = $request->input('username');
+        $groupId = $request->input('groupId');
+        $group = Group::find($groupId);
+
+        $users = User::where('name', 'LIKE', '%' . $kw . '%')->get();
+
+        //utilisateurs qui ne sont pas encore dans le groupe
+        $usersNotInGroup = $users->diff($group->participants);
+
+        $response = new JsonResponse($usersNotInGroup);
+        return $response->send();
+    }
+
     public function inviteUserToGroup($groupId, $userId)
     {
         $group = Group::find($groupId);

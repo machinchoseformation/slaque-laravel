@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Route;
 
 class User extends Authenticatable
 {
@@ -26,6 +27,16 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\GroupMessage');
     }
+
+    public function getInviteUrlAttribute()
+    {
+        return route('participant_invite_user_to_group', [
+            'userId' => $this->attributes['id'],
+            'groupId' => '%groupId%'
+        ]);
+    }
+
+    protected $appends = ['invite_url'];
 
     /**
      * The attributes that are mass assignable.
