@@ -18,6 +18,8 @@ class GroupMessage extends Migration
             $table->text('content');
             $table->boolean('edited')->default(false);
             $table->boolean('deleted')->default(false);
+            $table->boolean('is_link')->default(false);
+            $table->text('link_info')->nullable(true);
             $table->integer('creator_id')->unsigned();
             $table->foreign('creator_id')->references('id')->on('users');
             $table->integer('group_id')->unsigned();

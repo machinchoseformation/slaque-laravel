@@ -19,23 +19,31 @@ Route::get('/participant/ping', 'ParticipantController@participantPing')
 Route::get('/participant/search', 'ParticipantController@userSearch')
     ->name('user_search');
 
+Route::get('/message/link/preview', 'MessageController@linkPreview')
+    ->name('link_preview');
 
 
-Route::get('/', 'HomeController@index')->name('home');
-Route::get('/contact', 'MainController@contact');
+//accueil
+Route::get('/', 'HomeController@index')
+    ->name('home');
 
+//groups
+Route::get('/groupe', 'GroupController@list')
+    ->name('group_list');
 
+Route::get('/groupe/creation', 'GroupController@showCreateForm')
+    ->name('group_create');
 
-Route::get('/groupe', 'GroupController@list')->name('group_list');
-
-Route::get('/groupe/creation', 'GroupController@showCreateForm')->name('group_create');
-Route::get('/groupe/prive/creation', 'GroupController@createOneOnOne')->name('group_one_on_one_create');
 Route::post('/groupe/creation', 'GroupController@create');
 
 Route::get('/groupe/{id}', 'GroupController@show')
     ->where('id', '[0-9]+')
     ->name('group_show');
 
+Route::get('/groupe/prive/creation', 'GroupController@createOneOnOne')
+    ->name('group_one_on_one_create');
+
+//participants
 Route::get('/groupe/{groupId}/participants/invitations', 'ParticipantController@showInvite')
     ->where('groupId', '[0-9]+')
     ->name('participant_show_invite');
@@ -46,21 +54,28 @@ Route::get('/groupe/{groupId}/participants/invitations/{userId}', 'ParticipantCo
     ->name('participant_invite_user_to_group');
 
 // Authentication Routes...
-$this->get('connexion', 'Auth\LoginController@showLoginForm')->name('login');
+$this->get('connexion', 'Auth\LoginController@showLoginForm')
+    ->name('login');
 $this->post('connexion', 'Auth\LoginController@login');
-$this->post('deconnexion', 'Auth\LoginController@logout')->name('logout');
+$this->post('deconnexion', 'Auth\LoginController@logout')
+    ->name('logout');
 
 // Registration Routes...
 if ($options['inscription'] ?? true) {
-    $this->get('inscription', 'Auth\RegisterController@showRegistrationForm')->name('register');
+    $this->get('inscription', 'Auth\RegisterController@showRegistrationForm')
+        ->name('register');
     $this->post('inscription', 'Auth\RegisterController@register');
 }
 
 // Password Reset Routes...
-$this->get('mdp/changement', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-$this->post('mdp/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-$this->get('mdp/changement/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-$this->post('mdp/changement', 'Auth\ResetPasswordController@reset')->name('password.update');
+$this->get('mdp/changement', 'Auth\ForgotPasswordController@showLinkRequestForm')
+    ->name('password.request');
+$this->post('mdp/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')
+    ->name('password.email');
+$this->get('mdp/changement/{token}', 'Auth\ResetPasswordController@showResetForm')
+    ->name('password.reset');
+$this->post('mdp/changement', 'Auth\ResetPasswordController@reset')
+    ->name('password.update');
 
 // Email Verification Routes...
 if ($options['verify'] ?? false) {
@@ -69,4 +84,5 @@ if ($options['verify'] ?? false) {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')
+    ->name('home');

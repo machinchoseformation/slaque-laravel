@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="fr_FR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,8 +11,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/jquery.min.js') }}" defer></script>
-    <script>var pingUrl = "{{ @route('participant_ping')  }}";</script>
-    <script src="{{ asset('js/ping.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">

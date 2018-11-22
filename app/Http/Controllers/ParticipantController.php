@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class ParticipantController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function participantPing(Request $request)
     {
         $groupId = $request->input('groupId');

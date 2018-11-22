@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseMessage extends Model
 {
-    public $fillable = ['content', 'creator_id', 'edited', 'deleted'];
+    public $fillable = ['content', 'creator_id', 'edited', 'deleted', 'is_link', 'link_info'];
 
     protected $attributes = array(
         'edited' => false,

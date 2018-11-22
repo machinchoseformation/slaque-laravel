@@ -60,22 +60,36 @@ function addMessage(messageData){
     }
     messageTools += `</div>`;
 
+    var content = messageData.content;
+    if (messageData.is_link){
+        content = `<a href="${content}">${content}</a>`;
+    }
+
     var str = `
-        <article class="message ${messageClass}">
-            <div class="message-content">
-                <div class="message-by">${messageData.creator_name} à ${messageData.time}</div>
-                <p>${messageData.content}</p>
+        <article id="article-message-${messageData.id}" class="message ${messageClass}">
+            <div class="row">
+                <div class="message-content">
+                    <div class="message-by">${messageData.creator_name} à ${messageData.time}</div>
+                    <p>${content}</p>
+                </div>
+                ${messageTools}
             </div>
-            ${messageTools}
         </article>
     `;
     $("#messages-list").append(str);
+    if (messageData.is_link && messageData.link_info) {
+        addLinkPreview(JSON.parse(messageData.link_info), messageData.id)
+    }
     shownMessageIds.push(messageData.id);
 
+    scrollDown();
+
+}
+
+function scrollDown(){
     var wtf    = $("#messages-list");
     var height = wtf[0].scrollHeight;
     wtf.scrollTop(height);
-
 }
 
 function sendMessage(e) {
@@ -90,17 +104,40 @@ function sendMessage(e) {
         console.log(response);
         $("#message-input").val("");
         getMessageSince();
+        if (response.data.is_link) {
+            getLinkPreview(response.data.id, response.data.content);
+        }
     });
 }
 
-function loadUserConversation(e){
-    var userId = $(this).data("user-id");
+function getLinkPreview(messageId, link)
+{
     $.ajax({
-        //url:
+        url: linkPreviewUrl,
+        data: {
+            messageId: messageId,
+            link: link
+        }
     })
     .done(function(response){
-
+        addLinkPreview(response.data, messageId)
     })
+}
+
+function addLinkPreview(data, messageId){
+    var favi = "";
+    if (data.favicon){
+        favi = `<img class="favi" src="${data.favicon}">`;
+    }
+    var preview = `
+        <div class="link-preview">
+            <h4>${favi} ${data.title}</h4>
+            <p>${data.description}</p>
+        </div>
+        `;
+
+    $(`article#article-message-${messageId}`).append(preview);
+    scrollDown();
 }
 
 refreshBtn.on("click", function(e){
@@ -109,7 +146,6 @@ refreshBtn.on("click", function(e){
 });
 messageForm.on("submit", sendMessage);
 $("#messages-list").on("click", ".delete-btn", deleteMessage);
-$(".users-list .user-btn").on("click", loadUserConversation);
 
 window.setInterval(getMessageSince, 2000);
 

@@ -6,8 +6,10 @@
     <script>
         var deleteUrl = "{{ @route('message_delete')  }}";
         var loadUserConversationUrl = "{{ @route('participant_ping')  }}";
+        var linkPreviewUrl = "{{ @route('link_preview')  }}";
         var groupId = "{{ $group->id  }}";
     </script>
+
     <script src="{{ asset('js/app.js') }}" defer></script>
 @endsection
 
@@ -41,11 +43,12 @@
             <form method="post" id="message-form"
                   action="{{route('message_create', ['groupId' => $group->id])}}">
                 @csrf
-                <input type="text" id="message-input" name="message" placeholder="Coucou!">
+                <input type="text" id="message-input" name="message" placeholder="Coucou!" data-emojiable="true">
                 <button id="message-btn">OK</button>
             </form>
 
             <a id="refresh-btn" href="{{route('message_get_since', ['groupId' => $group->id])}}">Rafraîchir</a>
         </div>
     </div>
+
 @endsection

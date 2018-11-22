@@ -6,13 +6,22 @@ use App\Api\JsonResponse;
 use App\Group;
 use App\GroupMessage;
 
+use Goutte\Client;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Symfony\Component\DomCrawler\Crawler;
 
 class MessageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function delete(Request $request)
     {
         $message = GroupMessage::find($request->input('messageId'));
@@ -67,13 +76,78 @@ class MessageController extends Controller
             ])->setStatusCode(403);
         }
 
+        $content = $request->input('message');
+
+        $isLink = (filter_var($content, FILTER_VALIDATE_URL)) ? true : false;
+
         $message = GroupMessage::create([
-            "content" => $request->input('message'),
+            "content" => $content,
             "group_id" => $groupId,
             "creator_id" => Auth::id(),
+            "is_link" => $isLink
         ]);
 
         $response = new JsonResponse($message);
+        return $response->send();
+    }
+
+    public function linkPreview(Request $request){
+        $link = $request->input('link');
+        $messageId = $request->input('messageId');
+
+        $message = GroupMessage::find($messageId);
+
+        $goutteClient = new Client();
+        $guzzleClient = new \GuzzleHttp\Client(array(
+            'timeout' => 10,
+            'verify' => false,
+            'proxy' => 'http://10.100.0.248:8080',
+        ));
+
+        $goutteClient->setClient($guzzleClient);
+        $crawler = $goutteClient->request('GET', $link);
+
+        $urlComps = parse_url($link);
+        $baseUrl = $urlComps['scheme'] . "://" . $urlComps['host'];
+
+        $titleNode = $crawler->filter('title')->first();
+        $title = (count($titleNode)) ? $titleNode->html() : "";
+
+        $descriptionNode = $crawler->filter('meta[name="description"]')->first();
+        $description = (count($descriptionNode)) ? $descriptionNode->attr('content') : "";
+
+        //favicon
+        $faviconNode = $crawler->filter('link[rel="apple-touch-icon"]')->first();
+        $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
+
+        if (!$favicon){
+            $faviconNode = $crawler->filter('link[rel="icon"]')->first();
+            $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
+        }
+        if (!$favicon){
+            $faviconNode = $crawler->filter('link[rel="shortcut icon"]')->first();
+            $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
+        }
+
+        if (!$favicon){
+            $faviconNode = $crawler->filter('link[rel="favicon"]')->first();
+            $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
+        }
+
+        if (preg_match("/^\//", $favicon)){
+            $favicon = $baseUrl . $favicon;
+        }
+
+        $linkInfo = [
+            'title' => $title,
+            'description' => $description,
+            'favicon' => $favicon
+        ];
+
+        $message->link_info = json_encode($linkInfo);
+        $message->save();
+
+        $response = new JsonResponse($linkInfo);
         return $response->send();
     }
 }

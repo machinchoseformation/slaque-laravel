@@ -8,3 +8,6 @@
         @endif
     @endforeach
 </ul>
+
+<script>var pingUrl = "{{ @route('participant_ping')  }}";</script>
+<script src="{{ asset('js/ping.js') }}" defer></script>
