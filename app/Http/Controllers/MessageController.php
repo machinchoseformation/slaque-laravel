@@ -22,7 +22,9 @@ class MessageController extends Controller
             return $response->send();
         }
 
-        $message->delete();
+        $message->deleted = 1;
+        $message->updated_at = new \DateTime();
+        $message->save();
 
         return response()->json([
             'error_message' => null,

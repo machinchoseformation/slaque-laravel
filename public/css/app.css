@@ -122,6 +122,11 @@ main {
     padding: 5px 6px;
 }
 
+.message.deleted {
+    opacity: 0.5;
+    font-size: 0.8rem;
+}
+
 .message .message-content {
     flex-grow: 1;
 }

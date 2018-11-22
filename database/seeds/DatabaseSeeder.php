@@ -16,24 +16,53 @@ class DatabaseSeeder extends Seeder
 
         $usernames = ['yo', 'bla', 'pif', 'paf', 'pouf', 'toto', 'foo', 'bar'];
 
-        foreach($usernames as $username) {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('users')->truncate();
+        DB::table('groups')->truncate();
+        DB::table('group_user')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        foreach ($usernames as $username) {
             DB::table('users')->insert([
                 "name" => $username,
-                "email"=> "$username@gmail.com",
-                "password"=> bcrypt($username),
+                "email" => "$username@gmail.com",
+                "password" => bcrypt($username),
                 "created_at" => $faker->dateTimeBetween('- 2 years')
             ]);
         }
-        //@todo fix this shit
-        for($i=0; $i<100; $i++){
-            DB::table('groups')->insert(
-                [
-                    "name" => $faker->words(3, true),
-                    "creator_id" => array_rand($usernames),
-                    "is_one_on_one" => $faker->boolean()
-                ]
 
-            );
+        $allUsers = \App\User::all();
+
+        for ($i = 0; $i < 10; $i++) {
+
+            $creator = $faker->randomElement($allUsers);
+            $isOneOnOne = $faker->boolean(70);
+            $otherUser = null;
+            if ($isOneOnOne) {
+                $otherUser = \App\User::where('id', '!=', $creator->id)
+                    ->inRandomOrder()->first();
+            }
+
+            /*
+            $group = new \App\Group();
+            $group->name = $faker->words(3, true);
+            $group->creator_id = $creator->id;
+            $group->is_one_on_one = $isOneOnOne;
+            if ($isOneOnOne) {
+                $group->other_user_id = $otherUser->id;
+            }
+            $group->created_at = $faker->dateTimeBetween($creator->created_at);
+            $group->save();
+            $group->participants()->attach($creator->id);
+
+            if ($isOneOnOne) {
+                $group->participants()->attach($otherUser->id);
+            } else {
+
+            }
+
+            $group->save();
+            */
         }
     }
 }

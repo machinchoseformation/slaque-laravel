@@ -13,19 +13,8 @@
 </div>
 
 <section>
-    <h3>Les groupes que vous avez créés</h3>
-    @foreach (Auth::user()->groupsCreated as $group)
-        <article>
-            <a href="{{route('group_show', ['id' => 1])}}">{{$group->name}}</a>
-        </article>
-    @endforeach
-
-    <h3>Les groupes auxquels vous participez</h3>
-    @foreach (Auth::user()->groups as $group)
-        <article>
-            <a href="{{route('group_show', ['id' => 1])}}">{{$group->name}}</a>
-        </article>
-    @endforeach
+    <h3>Vos groupes</h3>
+    @include('inc.user_groups')
 </section>
 
 @endsection

@@ -6,6 +6,7 @@ use App\Group;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class GroupController extends Controller
@@ -20,6 +21,9 @@ class GroupController extends Controller
         $group = Group::find($id);
 
         //@todo: vérifier que le user a été invité || chef
+        if (Gate::denies('read-group-messages', $group)) {
+            abort(403, "Non non non, pas votre groupe.");
+        }
 
         return view('groups.show', ['group' => $group]);
     }

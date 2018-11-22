@@ -18,6 +18,11 @@ abstract class BaseMessage extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function getContentAttribute($content)
+    {
+        return ($this->attributes['deleted']) ? 'message supprimé' : $content;
+    }
+
     public function getCreatorNameAttribute()
     {
         return $this->creator->name;

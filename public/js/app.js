@@ -21,7 +21,9 @@ function deleteMessage(e){
         method: 'DELETE'
     })
     .done(function(response){
-        messageElement.slideUp('fast');
+        messageElement.addClass('deleted');
+        messageElement.find('.message-content p').html('message supprimé');
+        messageElement.find('.delete-btn').hide();
         console.log(response);
     });
 }
@@ -41,9 +43,6 @@ function getMessageSince(){
             addMessage(message);
         });
 
-        var wtf    = $("#messages-list");
-        var height = wtf[0].scrollHeight;
-        wtf.scrollTop(height);
     });
 }
 
@@ -53,19 +52,30 @@ function addMessage(messageData){
         return false;
     }
 
+    var messageClass = (messageData.deleted) ? 'deleted' : '';
+
+    var messageTools = `<div class="message-tools">`;
+    if (!messageData.deleted){
+        messageTools += `<button class="delete-btn" data-message-id="${messageData.id}">X</button>`;
+    }
+    messageTools += `</div>`;
+
     var str = `
-        <article class="message">
+        <article class="message ${messageClass}">
             <div class="message-content">
                 <div class="message-by">${messageData.creator_name} à ${messageData.time}</div>
                 <p>${messageData.content}</p>
             </div>
-            <div class="message-tools">
-                <button class="delete-btn" data-message-id="${messageData.id}">X</button>
-            </div>
+            ${messageTools}
         </article>
     `;
     $("#messages-list").append(str);
     shownMessageIds.push(messageData.id);
+
+    var wtf    = $("#messages-list");
+    var height = wtf[0].scrollHeight;
+    wtf.scrollTop(height);
+
 }
 
 function sendMessage(e) {
