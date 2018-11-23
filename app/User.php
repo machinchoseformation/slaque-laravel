@@ -25,7 +25,7 @@ class User extends Authenticatable
 
     public function groupMessages()
     {
-        return $this->hasMany('App\GroupMessage');
+        return $this->hasMany('App\Message');
     }
 
     public function getInviteUrlAttribute()

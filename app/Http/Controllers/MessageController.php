@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\JsonResponse;
 use App\Group;
-use App\GroupMessage;
+use App\Message;
 
 use Goutte\Client;
 
@@ -25,7 +25,7 @@ class MessageController extends Controller
 
     public function delete(Request $request)
     {
-        $message = GroupMessage::find($request->input('messageId'));
+        $message = Message::find($request->input('messageId'));
 
         if (Gate::denies('delete-message-in-group', $message)) {
             $response = new JsonResponse([], 'access denied', 'error', 403);
@@ -53,7 +53,7 @@ class MessageController extends Controller
 
         $since = $request->input('since');
 
-        $messages = GroupMessage::
+        $messages = Message::
             where('group_id', '=', $group->id)
             ->when($since, function($query, $since){
                 return $query->where('created_at', '>', $since);
@@ -81,7 +81,7 @@ class MessageController extends Controller
 
         $isLink = (filter_var($content, FILTER_VALIDATE_URL)) ? true : false;
 
-        $message = GroupMessage::create([
+        $message = Message::create([
             "content" => $content,
             "group_id" => $groupId,
             "creator_id" => Auth::id(),
@@ -96,7 +96,7 @@ class MessageController extends Controller
         $link = $request->input('link');
         $messageId = $request->input('messageId');
 
-        $message = GroupMessage::find($messageId);
+        $message = Message::find($messageId);
 
         $goutteClient = new Client();
         $guzzleClient = new \GuzzleHttp\Client(array(
