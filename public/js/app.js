@@ -1,14 +1,15 @@
 var messageForm = $("#message-form");
-var refreshBtn = $("#refresh-btn");
 var lastMessageDate = null;
 var shownMessageIds = [];
 
+//transmet le jeton csrf à toutes les requêtes
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
 
+//supprime un message
 function deleteMessage(e){
     e.preventDefault();
     var messageElement = $(this).parents('.message');
@@ -27,9 +28,10 @@ function deleteMessage(e){
     });
 }
 
+//récupère les nouveaux messages
 function getMessageSince(){
     $.ajax({
-        url: refreshBtn.attr("href"),
+        url: getMessageUrl,
         data: {
             'since': lastMessageDate
         }
@@ -45,6 +47,7 @@ function getMessageSince(){
     });
 }
 
+//ajoute le message au chat
 function addMessage(messageData){
     //already shown !!
     if (shownMessageIds.indexOf(messageData.id) >= 0){
@@ -85,12 +88,7 @@ function addMessage(messageData){
 
 }
 
-function scrollDown(){
-    var messageList    = $("#messages-list");
-    var height = messageList[0].scrollHeight;
-    messageList.scrollTop(height);
-}
-
+//envoie le message au serveur
 function sendMessage(e) {
     e.preventDefault();
     var message = $("#message-input").val();
@@ -108,6 +106,14 @@ function sendMessage(e) {
     });
 }
 
+//scroll au bas du chat
+function scrollDown(){
+    var messageList    = $("#messages-list");
+    var height = messageList[0].scrollHeight;
+    messageList.scrollTop(height);
+}
+
+//récupère le preview pour les liens
 function getLinkPreview(messageId, link)
 {
     $.ajax({
@@ -122,6 +128,7 @@ function getLinkPreview(messageId, link)
     })
 }
 
+//ajoute le preview au chat
 function addLinkPreview(data, messageId){
     var favi = "";
     var linkInfo = data.link_info;
@@ -149,16 +156,15 @@ function addLinkPreview(data, messageId){
     scrollDown();
 }
 
-refreshBtn.on("click", function(e){
-    e.preventDefault();
-    getMessageSince();
-});
+//event listeners
 messageForm.on("submit", sendMessage);
 $("#messages-list").on("click", ".delete-btn", deleteMessage);
 
+//récupère les nouveaux messages toutes les x ms
 window.setInterval(getMessageSince, 6000);
 
+//récupère les messages au chargement
 getMessageSince();
 
-//remove flash message after 3 seconds
+//supprime les messages flash après 3 secondes
 $(".flash-message").delay(3000).slideUp();

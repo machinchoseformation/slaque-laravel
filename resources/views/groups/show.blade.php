@@ -4,6 +4,7 @@
 
 @section('js')
     <script>
+        var getMessageUrl = "{{route('message_get_since', ['groupId' => $group->id])}}";
         var deleteUrl = "{{ @route('message_delete')  }}";
         var loadUserConversationUrl = "{{ @route('participant_ping')  }}";
         var linkPreviewUrl = "{{ @route('link_preview')  }}";
@@ -47,8 +48,6 @@
                 <input type="text" id="message-input" name="message" placeholder="Coucou!" data-emojiable="true">
                 <button id="message-btn">OK</button>
             </form>
-
-            <a id="refresh-btn" href="{{route('message_get_since', ['groupId' => $group->id])}}">Rafraîchir</a>
         </div>
     </div>
 
