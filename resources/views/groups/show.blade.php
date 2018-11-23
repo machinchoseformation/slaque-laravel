@@ -15,6 +15,7 @@
     </script>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/emojis.js') }}" defer></script>
 @endsection
 
 @section('content')
@@ -48,8 +49,12 @@
                   action="{{route('message_create', ['groupId' => $group->id])}}">
                 @csrf
                 <input type="text" id="message-input" name="message" placeholder="Coucou!" data-emojiable="true">
+
                 <button id="message-btn">OK</button>
             </form>
+
+            <div id="emojis-btn">Emojis</div>
+            <div id="emojis"></div>
         </div>
     </div>
 
