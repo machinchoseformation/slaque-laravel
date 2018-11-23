@@ -159,3 +159,6 @@ $("#messages-list").on("click", ".delete-btn", deleteMessage);
 window.setInterval(getMessageSince, 6000);
 
 getMessageSince();
+
+//remove flash message after 3 seconds
+$(".flash-message").delay(3000).slideUp();

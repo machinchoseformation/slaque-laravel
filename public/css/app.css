@@ -218,3 +218,10 @@ footer {
     color: #FFF;
     text-align: center;
 }
+
+.flash-message {
+    text-align: center;
+    padding: 10px;
+    background-color: #38c172;
+    color: #FFF;
+}

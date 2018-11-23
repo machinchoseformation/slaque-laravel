@@ -49,11 +49,12 @@
         </div>
     </header>
 
-    <div class="flash-message">
+
         @if(Session::has('message'))
-            <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            <div class="flash-message">
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            </div> <!-- end .flash-message -->
         @endif
-    </div> <!-- end .flash-message -->
 
     <main>
         <div class="container">
