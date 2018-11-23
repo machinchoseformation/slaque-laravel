@@ -13,11 +13,10 @@ class UserSeeder extends Seeder
     {
         $faker = Faker\Factory::create('fr_FR');
         $usernames = [];
-        for($i=0; $i<50; $i++){
+        for($i=0; $i<30; $i++){
             $usernames[] = $faker->unique()->userName;
         }
-        $usernames = ['yo', 'bla', 'pif', 'paf', 'pouf', 'toto', 'foo', 'bar'];
-        $usernames = array_merge($usernames, range('a', 'z'));
+        $usernames = array_merge($usernames, ['yo', 'bla', 'pif', 'paf', 'pouf', 'toto', 'foo', 'bar']);
 
         foreach ($usernames as $username) {
             DB::table('users')->insert([

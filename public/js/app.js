@@ -86,9 +86,9 @@ function addMessage(messageData){
 }
 
 function scrollDown(){
-    var wtf    = $("#messages-list");
-    var height = wtf[0].scrollHeight;
-    wtf.scrollTop(height);
+    var messageList    = $("#messages-list");
+    var height = messageList[0].scrollHeight;
+    messageList.scrollTop(height);
 }
 
 function sendMessage(e) {
