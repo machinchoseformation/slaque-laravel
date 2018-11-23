@@ -53,7 +53,7 @@
                 <button id="message-btn">OK</button>
             </form>
 
-            <div id="emojis-btn">Emojis</div>
+            <div id="emojis-btn">😀</div>
             <div id="emojis"></div>
         </div>
     </div>
