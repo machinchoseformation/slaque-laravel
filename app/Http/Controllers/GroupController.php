@@ -61,7 +61,7 @@ class GroupController extends Controller
         $group->participants()->attach($otherUser);
 
         return Redirect::route('group_show', ['id' => $group->id])
-            ->with('message', 'Groupe créé!');
+            ->with('message', 'Discussion avec ' . $otherUser->name . ' créée!');
     }
 
     public function create(Request $request)
