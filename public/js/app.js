@@ -24,6 +24,7 @@ function deleteMessage(e){
     .done(function(response){
         messageElement.addClass('deleted');
         messageElement.find('.message-content p').html('message supprimé');
+        messageElement.find('.link-preview').remove();
         messageElement.find('.delete-btn').hide();
     });
 }
@@ -57,7 +58,7 @@ function addMessage(messageData){
     var messageClass = (messageData.deleted) ? 'deleted' : '';
 
     var messageTools = `<div class="message-tools">`;
-    if (!messageData.deleted){
+    if (!messageData.deleted && messageData.creator_name == username){
         messageTools += `<button class="delete-btn" data-message-id="${messageData.id}">X</button>`;
     }
     messageTools += `</div>`;
@@ -79,7 +80,7 @@ function addMessage(messageData){
         </article>
     `;
     $("#messages-list").append(str);
-    if (messageData.is_link && messageData.link_info) {
+    if (messageData.is_link && messageData.link_info && !messageData.deleted) {
         addLinkPreview(messageData, messageData.id)
     }
     shownMessageIds.push(messageData.id);

@@ -10,6 +10,8 @@
         var linkPreviewUrl = "{{ @route('link_preview')  }}";
         var assetUrl = "{{ asset('')  }}";
         var groupId = "{{ $group->id  }}";
+        var username = "{{ Auth::user()->name }}";
+        var userId = {{ Auth::id() }};
     </script>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
