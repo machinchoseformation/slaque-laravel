@@ -24,7 +24,6 @@ function deleteMessage(e){
         messageElement.addClass('deleted');
         messageElement.find('.message-content p').html('message supprimé');
         messageElement.find('.delete-btn').hide();
-        console.log(response);
     });
 }
 
@@ -78,7 +77,7 @@ function addMessage(messageData){
     `;
     $("#messages-list").append(str);
     if (messageData.is_link && messageData.link_info) {
-        addLinkPreview(JSON.parse(messageData.link_info), messageData.id)
+        addLinkPreview(messageData, messageData.id)
     }
     shownMessageIds.push(messageData.id);
 
@@ -101,7 +100,6 @@ function sendMessage(e) {
         method: "post"
     }).
     done(function(response){
-        console.log(response);
         $("#message-input").val("");
         getMessageSince();
         if (response.data.is_link) {
@@ -126,15 +124,26 @@ function getLinkPreview(messageId, link)
 
 function addLinkPreview(data, messageId){
     var favi = "";
-    if (data.favicon){
-        favi = `<img class="favi" src="${data.favicon}">`;
-    }
-    var preview = `
-        <div class="link-preview">
-            <h4>${favi} ${data.title}</h4>
-            <p>${data.description}</p>
+    var linkInfo = data.link_info;
+
+    if (data.is_link_to_image){
+        var preview = `
+        <div class="link-preview image">
+            <img src="${assetUrl}img/groups/${linkInfo.local_name}">
         </div>
         `;
+    }
+    else {
+        if (linkInfo.favicon){
+            favi = `<img class="favi" src="${linkInfo.favicon}">`;
+        }
+        var preview = `
+        <div class="link-preview">
+            <h4>${favi} ${linkInfo.title}</h4>
+            <p>${linkInfo.description}</p>
+        </div>
+        `;
+    }
 
     $(`article#article-message-${messageId}`).append(preview);
     scrollDown();
@@ -147,6 +156,6 @@ refreshBtn.on("click", function(e){
 messageForm.on("submit", sendMessage);
 $("#messages-list").on("click", ".delete-btn", deleteMessage);
 
-window.setInterval(getMessageSince, 2000);
+window.setInterval(getMessageSince, 6000);
 
 getMessageSince();

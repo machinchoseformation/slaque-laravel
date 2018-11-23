@@ -6,12 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseMessage extends Model
 {
-    public $fillable = ['content', 'creator_id', 'edited', 'deleted', 'is_link', 'link_info'];
+    public $fillable = ['content', 'creator_id', 'edited', 'deleted', 'is_link', 'link_info', 'is_link_to_image'];
 
     protected $attributes = array(
         'edited' => false,
         'deleted' => false,
     );
+
+    protected $casts = [
+        'link_info' => 'array',
+    ];
+
 
     public function creator()
     {

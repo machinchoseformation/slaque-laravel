@@ -7,6 +7,7 @@
         var deleteUrl = "{{ @route('message_delete')  }}";
         var loadUserConversationUrl = "{{ @route('participant_ping')  }}";
         var linkPreviewUrl = "{{ @route('link_preview')  }}";
+        var assetUrl = "{{ asset('')  }}";
         var groupId = "{{ $group->id  }}";
     </script>
 

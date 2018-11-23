@@ -159,6 +159,10 @@ main {
     padding: 7px 20px;
 }
 
+.message .link-preview.image img {
+    max-width: 100%;
+}
+
 .message .link-preview .favi {
     height: 16px;
     position: relative;

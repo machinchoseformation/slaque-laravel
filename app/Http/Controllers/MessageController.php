@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\DomCrawler\Crawler;
 
 class MessageController extends Controller
@@ -104,6 +105,38 @@ class MessageController extends Controller
             'proxy' => 'http://10.100.0.248:8080',
         ));
 
+        //check if it is an image, downloads it
+        $r = $guzzleClient->get($link);
+        $contentTypes = $r->getHeader('Content-Type');
+        if (count($contentTypes) > 0){
+            $ct = $contentTypes[0];
+            if (preg_match("/^image\/(.+)/", $ct, $matches)){
+                $ext = $matches[1];
+                $newFilename = md5(uniqid()) . "." . $ext;
+                file_put_contents('img/groups/' . $newFilename, $r->getBody());
+
+                //make sure it is an image
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mime = finfo_file($finfo, 'img/groups/' . $newFilename) . "\n";
+                finfo_close($finfo);
+
+                if (!preg_match("/^image\/(.+)/", $ct)) {
+                    //delete the file
+                    unlink('img/groups/' . $newFilename);
+                    $response = new JsonResponse([], 'not an image', 'error', 403);
+                    return $response->send();
+                }
+
+                $linkInfo = ['local_name' => $newFilename];
+                $message->link_info = $linkInfo;
+                $message->is_link_to_image = true;
+                $message->save();
+
+                $response = new JsonResponse($message);
+                return $response->send();
+            }
+        }
+
         $goutteClient->setClient($guzzleClient);
         $crawler = $goutteClient->request('GET', $link);
 
@@ -144,10 +177,12 @@ class MessageController extends Controller
             'favicon' => $favicon
         ];
 
-        $message->link_info = json_encode($linkInfo);
+        $message->link_info = $linkInfo;
         $message->save();
 
-        $response = new JsonResponse($linkInfo);
+        $message->refresh();
+
+        $response = new JsonResponse($message);
         return $response->send();
     }
 }

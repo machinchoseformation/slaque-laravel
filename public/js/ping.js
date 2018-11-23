@@ -28,4 +28,4 @@ function ping(){
     });
 }
 
-window.setInterval(ping, 1000);
+window.setInterval(ping, 10000);
