@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Slaque'),
 
     /*
     |--------------------------------------------------------------------------
@@ -172,7 +172,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        //ajouté par guili
+        App\Providers\ScraperServiceProvider::class,
     ],
 
     /*

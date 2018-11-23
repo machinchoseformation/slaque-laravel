@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api\JsonResponse;
 use App\Group;
+use App\Http\Preview\Scraper;
 use App\Message;
 
 use Goutte\Client;
@@ -92,97 +93,12 @@ class MessageController extends Controller
         return $response->send();
     }
 
-    public function linkPreview(Request $request){
+    public function linkPreview(Request $request, Scraper $scraper){
         $link = $request->input('link');
         $messageId = $request->input('messageId');
 
         $message = Message::find($messageId);
-
-        $goutteClient = new Client();
-        $guzzleClient = new \GuzzleHttp\Client(array(
-            'timeout' => 10,
-            'verify' => false,
-            'proxy' => 'http://10.100.0.248:8080',
-        ));
-
-        //check if it is an image, downloads it
-        $r = $guzzleClient->get($link);
-        $contentTypes = $r->getHeader('Content-Type');
-        if (count($contentTypes) > 0){
-            $ct = $contentTypes[0];
-            if (preg_match("/^image\/(.+)/", $ct, $matches)){
-                $ext = $matches[1];
-                $newFilename = md5(uniqid()) . "." . $ext;
-                file_put_contents('img/groups/' . $newFilename, $r->getBody());
-
-                //make sure it is an image
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mime = finfo_file($finfo, 'img/groups/' . $newFilename) . "\n";
-                finfo_close($finfo);
-
-                if (!preg_match("/^image\/(.+)/", $ct)) {
-                    //delete the file
-                    unlink('img/groups/' . $newFilename);
-                    $response = new JsonResponse([], 'not an image', 'error', 403);
-                    return $response->send();
-                }
-
-                $linkInfo = ['local_name' => $newFilename];
-                $message->link_info = $linkInfo;
-                $message->is_link_to_image = true;
-                $message->save();
-
-                $response = new JsonResponse($message);
-                return $response->send();
-            }
-        }
-
-        $goutteClient->setClient($guzzleClient);
-        $crawler = $goutteClient->request('GET', $link);
-
-        $urlComps = parse_url($link);
-        $baseUrl = $urlComps['scheme'] . "://" . $urlComps['host'];
-
-        $titleNode = $crawler->filter('title')->first();
-        $title = (count($titleNode)) ? $titleNode->html() : "";
-
-        $descriptionNode = $crawler->filter('meta[name="description"]')->first();
-        $description = (count($descriptionNode)) ? $descriptionNode->attr('content') : "";
-
-        //favicon
-        $faviconNode = $crawler->filter('link[rel="apple-touch-icon"]')->first();
-        $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
-
-        if (!$favicon){
-            $faviconNode = $crawler->filter('link[rel="icon"]')->first();
-            $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
-        }
-        if (!$favicon){
-            $faviconNode = $crawler->filter('link[rel="shortcut icon"]')->first();
-            $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
-        }
-
-        if (!$favicon){
-            $faviconNode = $crawler->filter('link[rel="favicon"]')->first();
-            $favicon = (count($faviconNode)) ? $faviconNode->attr('href') : null;
-        }
-
-        if (preg_match("/^\//", $favicon)){
-            $favicon = $baseUrl . $favicon;
-        }
-
-        $linkInfo = [
-            'title' => $title,
-            'description' => $description,
-            'favicon' => $favicon
-        ];
-
-        $message->link_info = $linkInfo;
-        $message->save();
-
-        $message->refresh();
-
-        $response = new JsonResponse($message);
-        return $response->send();
+        $response = $scraper->scrap($link, $message);
+        return $response;
     }
 }
