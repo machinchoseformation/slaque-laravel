@@ -25,6 +25,10 @@ class GroupController extends Controller
     {
         $group = Group::find($id);
 
+        if (!$group){
+            abort(404, 'Groupe non trouvé !');
+        }
+
         if (Gate::denies('read-group-messages', $group)) {
             abort(403, "Non non non, pas votre groupe.");
         }
